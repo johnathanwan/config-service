@@ -40,3 +40,16 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.withType<Test> { useJUnitPlatform() }
+
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    imageName.set(project.name)
+    environment.set(mapOf("BP_JVM_VERSION" to "17.*"))
+    publish.set(false)
+    docker {
+        publishRegistry {
+            username.set(project.findProperty("registryUsername")?.toString())
+            password.set(project.findProperty("registryToken")?.toString())
+            url.set(project.findProperty("registryUrl")?.toString())
+        }
+    }
+}
